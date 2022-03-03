@@ -17,7 +17,7 @@ import {
 } from '../../../src/database/rabbitmq';
 import { fullLoadById } from '../../../src/database/middleware';
 import { rebuildInstanceWithPatch } from '../../../src/utils/patch';
-import { buildStixData } from '../../../src/database/stix';
+import { convertInstanceToStix } from '../../../src/database/stix';
 import { STIX_ATTRIBUTE_TO_META_RELATIONS_FIELD } from '../../../src/schema/stixMetaRelationship';
 
 const OPERATIONS = [UPDATE_OPERATION_ADD, UPDATE_OPERATION_REMOVE, UPDATE_OPERATION_REPLACE];
@@ -30,7 +30,6 @@ describe('Raw streams tests', () => {
     await shutdownModules();
   });
   // We need to check the event format to be sure that everything is setup correctly
-  // eslint-disable-next-line prettier/prettier
   it(
     'Should stream correctly formatted',
     async () => {
@@ -143,12 +142,11 @@ describe('Raw streams tests', () => {
     FIVE_MINUTES
   );
   // Based on all events of a specific element, can we reconstruct the final state correctly?
-  // eslint-disable-next-line prettier/prettier
   it(
     'Should events rebuild succeed',
     async () => {
       const report = await fullLoadById(ADMIN_USER, 'report--f2b63e80-b523-4747-a069-35c002c690db');
-      const stixReport = buildStixData(report);
+      const stixReport = convertInstanceToStix(report);
       const events = await fetchStreamEvents('http://localhost:4000/stream', { from: '0' });
       const reportEvents = events.filter((e) => report.standard_id === e.data.data.id);
       expect(reportEvents.length).toBe(1);
@@ -169,7 +167,6 @@ describe('Raw streams tests', () => {
     FIVE_MINUTES
   );
   // Based on all events of a specific element, can we reconstruct the final state correctly?
-  // eslint-disable-next-line prettier/prettier
   it(
     'Should events context available',
     async () => {

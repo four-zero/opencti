@@ -20,7 +20,7 @@ import {
 import { elAggregationCount } from '../../src/database/engine';
 import { execPython3, executePython } from '../../src/python/pythonBridge';
 import { fullLoadById } from '../../src/database/middleware';
-import { buildStixData } from '../../src/database/stix';
+import { convertInstanceToStix } from '../../src/database/stix';
 import { checkInstanceDiff } from '../utils/testStream';
 import { shutdownModules, startModules } from '../../src/modules';
 import { FROM_START_STR } from '../../src/utils/format';
@@ -96,7 +96,7 @@ describe('Database provision', () => {
     expect(relMap.get('Uses')).toEqual(28);
     // Report content
     const initReport = await fullLoadById(ADMIN_USER, 'report--f2b63e80-b523-4747-a069-35c002c690db');
-    const initStixReport = buildStixData(initReport);
+    const initStixReport = convertInstanceToStix(initReport);
     return { objectMap, relMap, initStixReport };
   };
   const checkMapConsistency = (before, after) => {
@@ -124,7 +124,6 @@ describe('Database provision', () => {
     expect(diffElements.length).toBe(0);
   };
 
-  // eslint-disable-next-line prettier/prettier
   it(
     'Should python raw sync succeed',
     async () => {
@@ -143,7 +142,6 @@ describe('Database provision', () => {
     FIFTEEN_MINUTES
   );
 
-  // eslint-disable-next-line prettier/prettier
   it(
     'Should python live sync succeed',
     async () => {
@@ -170,7 +168,6 @@ describe('Database provision', () => {
     FIFTEEN_MINUTES
   );
 
-  // eslint-disable-next-line prettier/prettier
   it(
     'Should direct sync succeed',
     async () => {
@@ -278,7 +275,7 @@ describe('Database provision', () => {
       (message) => message.includes('restore run completed')
     );
   };
-  // eslint-disable-next-line prettier/prettier
+
   it(
     'Should backup/restore sync succeed',
     async () => {
