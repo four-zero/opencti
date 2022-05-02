@@ -141,11 +141,13 @@ export const checkSystemDependencies = async () => {
 // Initialize
 const initializeSchema = async () => {
   // New platform so delete all indices to prevent conflict
+  console.log('initializeSchema chreate indexes');
   const isInternalIndexExists = await elIndexExists(INDEX_INTERNAL_OBJECTS);
   if (isInternalIndexExists) {
     throw ConfigurationError('[INIT] Fail initialize schema, index already exists');
   }
   // Create default indexes
+  console.log('chreate indexes');
   await elCreateIndexes();
   logApp.info('[INIT] Search engine indexes loaded');
   return true;
@@ -367,6 +369,7 @@ const isCompatiblePlatform = async () => {
 const platformInit = async (withMarkings = true) => {
   let lock;
   try {
+    console.log('my plat form init');
     await checkSystemDependencies();
     await cachePurge();
     lock = await lockResource([PLATFORM_LOCK_ID]);

@@ -65,6 +65,7 @@ import userSubscriptionResolvers from '../resolvers/userSubscription';
 import statusResolvers from '../resolvers/status';
 import ruleResolvers from '../resolvers/rule';
 import stixResolvers from '../resolvers/stix';
+import evelogFlowResolvers from '../resolvers/evelogFlow';
 
 const createSchema = () => {
   const globalResolvers = {
@@ -153,6 +154,8 @@ const createSchema = () => {
     // ALL
     organizationOrIndividualResolvers,
     stixObjectOrStixRelationshipResolvers,
+    // EVELOG
+    evelogFlowResolvers,
   ]);
   const { authDirectiveTransformer } = authDirectiveBuilder('auth');
   let schema = makeExecutableSchema({

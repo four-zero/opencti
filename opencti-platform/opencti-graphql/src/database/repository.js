@@ -1,14 +1,15 @@
 import { assoc, filter, includes, map, pipe } from 'ramda';
-import { READ_ENTITIES_INDICES } from './utils';
+import { READ_ENTITIES_INDICES, READ_INDEX_EVELOGS } from './utils';
 import { elPaginate } from './engine';
 import { ENTITY_TYPE_CONNECTOR } from '../schema/internalObject';
 import { connectorConfig } from './rabbitmq';
 import { sinceNowInMinutes } from '../utils/format';
+import { logApp } from '../config/conf';
 
 // region global queries
 export const buildFilters = (args = {}) => {
   const builtFilters = { ...args };
-  const { types = [], entityTypes = [], relationshipTypes = [] } = args;
+  const { types = [], entityTypes = [], relationshipTypes = [], eventTypes = [] } = args;
   const { elementId, elementWithTargetTypes = [] } = args;
   const { fromId, fromRole, fromTypes = [] } = args;
   const { toId, toRole, toTypes = [] } = args;
@@ -65,8 +66,14 @@ export const buildFilters = (args = {}) => {
     customFilters.push({ key: 'connections', nested: nestedTo });
   }
   // endregion
+  // evelog proto
+  //const nestedEvelogProto = [];
+  //if (proto) {
+    //customFilters.push({ key: 'proto', nested: nestedEvelogProto })
+  //}
+  // end evelog proto
   // Override some special filters
-  builtFilters.types = [...(types ?? []), ...entityTypes, ...relationshipTypes];
+  builtFilters.types = [...(types ?? []), ...entityTypes, ...relationshipTypes, ...eventTypes];
   builtFilters.filters = customFilters;
   return builtFilters;
 };
@@ -77,6 +84,13 @@ export const listEntities = async (user, entityTypes, args = {}) => {
   return elPaginate(user, indices, paginateArgs);
 };
 // endregion
+
+export const listEvelogs = async (user, eventTypes, args = {}) => {
+  const { indices = READ_INDEX_EVELOGS } = args;
+  const paginateArgs = buildFilters({ eventTypes, ...args });
+  logApp.debug('[EVELOG] paginate evelogs', { indices });
+  return elPaginate(user, indices, paginateArgs);
+}
 
 // region connectors
 export const completeConnector = (connector) => {

@@ -9,6 +9,7 @@ import {
   buildPagination,
   cursorToOffset,
   ES_INDEX_PREFIX,
+  INDEX_EVELOGS,
   isEmptyField,
   isNotEmptyField,
   offsetToCursor,
@@ -278,6 +279,55 @@ const elCreateIndexTemplate = async () => {
     });
   await el.indices
     .putIndexTemplate({
+      name: `${ES_INDEX_PREFIX}-evelogs-index-template`,
+      create: false,
+      body: {
+        index_patterns: [`${INDEX_EVELOGS}*`],
+        priority: 1,
+        template: {
+          mappings: {
+            dynamic_templates: [
+              {
+                strings: {
+                  mapping: {
+                    type: 'text',
+                    fields: {
+                      keyword: {
+                        type: 'keyword',
+                        normalizer: 'string_normalizer',
+                        ignore_above: 512,
+                      },
+                    },
+                  },
+                  match_mapping_type: 'string',
+                },
+              },
+            ],
+            properties: {
+              timestamp: {
+                type: 'date',
+              },
+              dest_ip: {
+                type: 'ip',
+              },
+              src_ip: {
+                type: 'ip',
+              },
+            },
+          },
+        },
+        composed_of: [`${ES_INDEX_PREFIX}-core-settings`],
+        version: 3,
+        _meta: {
+          description: 'To generate evelog expected index mappings',
+        },
+      },
+    })
+    .catch((e) => {
+      throw DatabaseError('Error creating evelog template', { error: e });
+    });
+  await el.indices
+    .putIndexTemplate({
       name: `${ES_INDEX_PREFIX}-index-template`,
       create: false,
       body: {
@@ -435,8 +485,11 @@ export const elCreateIndexes = async (indexesToCreate = WRITE_PLATFORM_INDICES) 
   return Promise.all(
     indexesToCreate.map((index) => {
       const indexName = `${index}${ES_INDEX_PATTERN_SUFFIX}`;
+      console.log(indexName);
       return el.indices.exists({ index: indexName }).then((result) => {
         if (result.body === false) {
+          console.log('create index:');
+          console.log(indexName);
           return el.indices.create({ index: indexName, body: { aliases: { [index]: {} } } }).catch((e) => {
             throw DatabaseError('Error creating index', { error: e });
           });
@@ -1417,6 +1470,7 @@ export const elPaginate = async (user, indexName, options = {}) => {
         return [
           { match_phrase: { 'entity_type.keyword': typeValue } },
           { match_phrase: { 'parent_types.keyword': typeValue } },
+          { match_phrase: { 'event_type.keyword': typeValue } },
         ];
       })
     );
@@ -1533,7 +1587,10 @@ export const elPaginate = async (user, indexName, options = {}) => {
     }
     // Add standard_id if not specify to ensure ordering uniqueness
     if (!orderCriterion.includes('standard_id')) {
-      ordering.push({ 'standard_id.keyword': 'asc' });
+      const indexNameArray = Array.isArray(indexName) ? indexName : [indexName];
+      if (!indexNameArray.includes('opencti_evelogs*')) {
+        ordering.push({ 'standard_id.keyword': 'asc' });
+      }
     }
   } else if (search !== null && search.length > 0) {
     ordering.push({ _score: 'desc' });
@@ -1591,6 +1648,13 @@ export const elPaginate = async (user, indexName, options = {}) => {
   return el
     .search(query)
     .then((data) => {
+      logApp.debug('[SEARCH ENGINE QUERY]', { query });
+      console.log(query.index);
+      if (query.index == 'opencti_evelogs*') {
+        logApp.debug('[EVELOG] evelogs index paginate', { data });
+      } else {
+        logApp.debug('[EVELOG] other index', { query });
+      }
       const convertedHits = R.map((n) => elDataConverter(n), data.body.hits.hits);
       if (connectionFormat) {
         const nodeHits = R.map((n) => ({ node: n, sort: n.sort }), convertedHits);
