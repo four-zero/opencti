@@ -55,22 +55,22 @@
     "reference_attachment": false,
     "admin": {
       "email": "admin@opencti.io",
-      "password": "ChangeMe",
-      "token": "ChangeMe"
+      "password": "admin",
+      "token": "b6fe6d43-2cad-4fad-b2a1-22da6455555a"
     }
   },
   "rule_engine": {
-    "enabled": true,
+    "enabled": false,
     "lock_key": "rule_engine_lock",
     "status_writing_delay": 2000
   },
   "task_scheduler": {
-    "enabled": true,
+    "enabled": false,
     "lock_key": "task_manager_lock",
     "interval": 10000
   },
   "expiration_scheduler": {
-    "enabled": true,
+    "enabled": false,
     "lock_key": "expired_manager_lock",
     "interval": 300000
   },
@@ -80,18 +80,18 @@
     "interval": 10000
   },
   "sync_manager": {
-    "enabled": true,
+    "enabled": false,
     "lock_key": "sync_manager_lock",
     "interval": 10000
   },
   "retention_manager": {
-    "enabled": true,
+    "enabled": false,
     "lock_key": "retention_manager_lock",
     "interval": 60000
   },
   "redis": {
     "namespace": "",
-    "hostname": "localhost",
+    "hostname": "172.17.0.1",
     "use_ssl": false,
     "ca": [],
     "port": 6379,
@@ -100,7 +100,7 @@
   },
   "elasticsearch": {
     "index_prefix": "opencti",
-    "url": "http://localhost:9200",
+    "url": "http://172.17.0.1:9200",
     "index_creation_pattern": "-000001",
     "search_ignore_throttled": false,
     "max_pagination_result": 5000,
@@ -108,14 +108,14 @@
   },
   "minio": {
     "bucket_name": "opencti-bucket",
-    "endpoint": "localhost",
+    "endpoint": "172.17.0.1",
     "port": 9000,
     "use_ssl": false,
-    "access_key": "ChangeMe",
-    "secret_key": "ChangeMe"
+    "access_key": "5b5e6fd9-eff5-4f29-a800-d772921bbc48",
+    "secret_key": "ce2fa52c-a50c-4d13-93cf-3b25baa158e4"
   },
   "rabbitmq": {
-    "hostname": "localhost",
+    "hostname": "172.17.0.1",
     "use_ssl": false,
     "ca": [],
     "port": 5672,
@@ -125,7 +125,7 @@
     "password": "guest"
   },
   "smtp": {
-    "hostname": "localhost",
+    "hostname": "172.17.0.1",
     "use_ssl": false,
     "reject_unauthorized": false,
     "port": 25,
