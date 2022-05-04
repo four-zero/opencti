@@ -20,7 +20,7 @@ const evelogFlowResolvers = {
     },
   },
   EvelogFlowsFilter: evelogFlowOptions.EvelogFlowsFilter,
-  Evelog: {
+  EvelogFlow: {
     __resolveType(obj) {
       console.log("graphql EvelogFlow", obj);
       if (obj.event_type === 'flow') {

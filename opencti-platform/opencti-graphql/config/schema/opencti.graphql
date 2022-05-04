@@ -10146,22 +10146,22 @@ type Mutation {
 
 
 ###### EVELOG
-type EvelogEther {
+type EvelogTypeEther {
   dest_macs: [String]
   src_macs: [String]
 }
-type EvelogBypassed {
+type EvelogTypeBypassed {
   pkts_toserver: Int
   pkts_toclient: Int
   bytes_toserver: Int
   bytes_toclient: Int
 }
-type EvelogFlow {
+type EvelogTypeFlow {
   pkts_toserver: Int
   pkts_toclient: Int
   bytes_toserver: Int
   bytes_toclient: Int
-  bypassed: EvelogBypassed
+  bypassed: EvelogTypeBypassed
   start: String
   end: String
   age: Int
@@ -10173,7 +10173,7 @@ type EvelogFlow {
   wrong_thread: Boolean
   action: String
 }
-type EvelogTcp {
+type EvelogTypeTcp {
   tcp_flags: String
   tcp_flags_ts: String
   tcp_flags_tc: String
@@ -10213,9 +10213,9 @@ type EvelogFlowConnection {
 }
 type EvelogFlowEdge {
   cursor: String!
-  node: Evelog!
+  node: EvelogFlow!
 }
-interface Evelog {
+interface EvelogFlow {
   # Header From Flow
   timestamp: String
   flow_id: Int
@@ -10238,16 +10238,16 @@ interface Evelog {
   app_proto_orig: String
   app_proto_expected: String
   # Common Option
-  ether: EvelogEther
+  ether: EvelogTypeEther
   community_id: String
   tenant_id: Int
   # Flow
-  #flow: EvelogFlow
+  flow: EvelogTypeFlow
   # Tcp
-  #tcp: EvelogTcp
+  tcp: EvelogTypeTcp
 }
 
-type EvelogFlowOne implements Evelog {
+type EvelogFlowOne implements EvelogFlow {
   # Header From Flow
   timestamp: String
   flow_id: Int
@@ -10270,19 +10270,19 @@ type EvelogFlowOne implements Evelog {
   app_proto_orig: String
   app_proto_expected: String
   # Common Option
-  ether: EvelogEther
+  ether: EvelogTypeEther
   community_id: String
   tenant_id: Int
   # Flow
-  flow: EvelogFlow
+  flow: EvelogTypeFlow
   # Tcp
-  tcp: EvelogTcp
+  tcp: EvelogTypeTcp
 }
 
 extend type Query {
   ###### EVELOG
   ######## EVELOG FLOW
-  evelogFlow(id: String!): EvelogFlowOne @auth(for: [KNOWLEDGE])
+  evelogFlow(id: String!): EvelogFlow @auth(for: [KNOWLEDGE])
   evelogFlows(
     first: Int
     after: ID

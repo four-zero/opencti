@@ -2503,7 +2503,7 @@ export type EmailMimePartTypeAddInput = {
   content_type?: InputMaybe<Scalars['String']>;
 };
 
-export type Evelog = {
+export type EvelogFlow = {
   app_proto?: Maybe<Scalars['String']>;
   app_proto_expected?: Maybe<Scalars['String']>;
   app_proto_orig?: Maybe<Scalars['String']>;
@@ -2512,8 +2512,9 @@ export type Evelog = {
   community_id?: Maybe<Scalars['String']>;
   dest_ip?: Maybe<Scalars['String']>;
   dest_port?: Maybe<Scalars['Int']>;
-  ether?: Maybe<EvelogEther>;
+  ether?: Maybe<EvelogTypeEther>;
   event_type?: Maybe<Scalars['String']>;
+  flow?: Maybe<EvelogTypeFlow>;
   flow_id?: Maybe<Scalars['Int']>;
   icmp_code?: Maybe<Scalars['Int']>;
   icmp_type?: Maybe<Scalars['Int']>;
@@ -2523,42 +2524,10 @@ export type Evelog = {
   spi?: Maybe<Scalars['Int']>;
   src_ip?: Maybe<Scalars['String']>;
   src_port?: Maybe<Scalars['Int']>;
+  tcp?: Maybe<EvelogTypeTcp>;
   tenant_id?: Maybe<Scalars['Int']>;
   timestamp?: Maybe<Scalars['String']>;
   vlan?: Maybe<Array<Maybe<Scalars['Int']>>>;
-};
-
-export type EvelogBypassed = {
-  __typename?: 'EvelogBypassed';
-  bytes_toclient?: Maybe<Scalars['Int']>;
-  bytes_toserver?: Maybe<Scalars['Int']>;
-  pkts_toclient?: Maybe<Scalars['Int']>;
-  pkts_toserver?: Maybe<Scalars['Int']>;
-};
-
-export type EvelogEther = {
-  __typename?: 'EvelogEther';
-  dest_macs?: Maybe<Array<Maybe<Scalars['String']>>>;
-  src_macs?: Maybe<Array<Maybe<Scalars['String']>>>;
-};
-
-export type EvelogFlow = {
-  __typename?: 'EvelogFlow';
-  action?: Maybe<Scalars['String']>;
-  age?: Maybe<Scalars['Int']>;
-  alerted?: Maybe<Scalars['Boolean']>;
-  bypass?: Maybe<Scalars['String']>;
-  bypassed?: Maybe<EvelogBypassed>;
-  bytes_toclient?: Maybe<Scalars['Int']>;
-  bytes_toserver?: Maybe<Scalars['Int']>;
-  emergency?: Maybe<Scalars['Boolean']>;
-  end?: Maybe<Scalars['String']>;
-  pkts_toclient?: Maybe<Scalars['Int']>;
-  pkts_toserver?: Maybe<Scalars['Int']>;
-  reason?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
-  wrong_thread?: Maybe<Scalars['Boolean']>;
 };
 
 export type EvelogFlowConnection = {
@@ -2570,10 +2539,10 @@ export type EvelogFlowConnection = {
 export type EvelogFlowEdge = {
   __typename?: 'EvelogFlowEdge';
   cursor: Scalars['String'];
-  node: Evelog;
+  node: EvelogFlow;
 };
 
-export type EvelogFlowOne = Evelog & {
+export type EvelogFlowOne = EvelogFlow & {
   __typename?: 'EvelogFlowOne';
   app_proto?: Maybe<Scalars['String']>;
   app_proto_expected?: Maybe<Scalars['String']>;
@@ -2583,9 +2552,9 @@ export type EvelogFlowOne = Evelog & {
   community_id?: Maybe<Scalars['String']>;
   dest_ip?: Maybe<Scalars['String']>;
   dest_port?: Maybe<Scalars['Int']>;
-  ether?: Maybe<EvelogEther>;
+  ether?: Maybe<EvelogTypeEther>;
   event_type?: Maybe<Scalars['String']>;
-  flow?: Maybe<EvelogFlow>;
+  flow?: Maybe<EvelogTypeFlow>;
   flow_id?: Maybe<Scalars['Int']>;
   icmp_code?: Maybe<Scalars['Int']>;
   icmp_type?: Maybe<Scalars['Int']>;
@@ -2595,7 +2564,7 @@ export type EvelogFlowOne = Evelog & {
   spi?: Maybe<Scalars['Int']>;
   src_ip?: Maybe<Scalars['String']>;
   src_port?: Maybe<Scalars['Int']>;
-  tcp?: Maybe<EvelogTcp>;
+  tcp?: Maybe<EvelogTypeTcp>;
   tenant_id?: Maybe<Scalars['Int']>;
   timestamp?: Maybe<Scalars['String']>;
   vlan?: Maybe<Array<Maybe<Scalars['Int']>>>;
@@ -2631,8 +2600,41 @@ export enum EvelogFlowsOrdering {
   Timestamp = 'timestamp'
 }
 
-export type EvelogTcp = {
-  __typename?: 'EvelogTcp';
+export type EvelogTypeBypassed = {
+  __typename?: 'EvelogTypeBypassed';
+  bytes_toclient?: Maybe<Scalars['Int']>;
+  bytes_toserver?: Maybe<Scalars['Int']>;
+  pkts_toclient?: Maybe<Scalars['Int']>;
+  pkts_toserver?: Maybe<Scalars['Int']>;
+};
+
+export type EvelogTypeEther = {
+  __typename?: 'EvelogTypeEther';
+  dest_macs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  src_macs?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type EvelogTypeFlow = {
+  __typename?: 'EvelogTypeFlow';
+  action?: Maybe<Scalars['String']>;
+  age?: Maybe<Scalars['Int']>;
+  alerted?: Maybe<Scalars['Boolean']>;
+  bypass?: Maybe<Scalars['String']>;
+  bypassed?: Maybe<EvelogTypeBypassed>;
+  bytes_toclient?: Maybe<Scalars['Int']>;
+  bytes_toserver?: Maybe<Scalars['Int']>;
+  emergency?: Maybe<Scalars['Boolean']>;
+  end?: Maybe<Scalars['String']>;
+  pkts_toclient?: Maybe<Scalars['Int']>;
+  pkts_toserver?: Maybe<Scalars['Int']>;
+  reason?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  wrong_thread?: Maybe<Scalars['Boolean']>;
+};
+
+export type EvelogTypeTcp = {
+  __typename?: 'EvelogTypeTcp';
   state?: Maybe<Scalars['String']>;
   tcp_flags?: Maybe<Scalars['String']>;
   tcp_flags_tc?: Maybe<Scalars['String']>;
@@ -8089,7 +8091,7 @@ export type Query = {
   courseOfAction?: Maybe<CourseOfAction>;
   coursesOfAction?: Maybe<CourseOfActionConnection>;
   elasticSearchMetrics?: Maybe<ElasticSearchMetrics>;
-  evelogFlow?: Maybe<EvelogFlowOne>;
+  evelogFlow?: Maybe<EvelogFlow>;
   evelogFlows?: Maybe<EvelogFlowConnection>;
   evelogFlowsDistribution?: Maybe<Array<Maybe<Distribution>>>;
   evelogFlowsNumber?: Maybe<Number>;
@@ -15747,17 +15749,17 @@ export type ResolversTypes = {
   EmailMessageAddInput: EmailMessageAddInput;
   EmailMimePartType: ResolverTypeWrapper<EmailMimePartType>;
   EmailMimePartTypeAddInput: EmailMimePartTypeAddInput;
-  Evelog: ResolversTypes['EvelogFlowOne'];
-  EvelogBypassed: ResolverTypeWrapper<EvelogBypassed>;
-  EvelogEther: ResolverTypeWrapper<EvelogEther>;
-  EvelogFlow: ResolverTypeWrapper<EvelogFlow>;
+  EvelogFlow: ResolversTypes['EvelogFlowOne'];
   EvelogFlowConnection: ResolverTypeWrapper<EvelogFlowConnection>;
   EvelogFlowEdge: ResolverTypeWrapper<EvelogFlowEdge>;
   EvelogFlowOne: ResolverTypeWrapper<EvelogFlowOne>;
   EvelogFlowsFilter: EvelogFlowsFilter;
   EvelogFlowsFiltering: EvelogFlowsFiltering;
   EvelogFlowsOrdering: EvelogFlowsOrdering;
-  EvelogTcp: ResolverTypeWrapper<EvelogTcp>;
+  EvelogTypeBypassed: ResolverTypeWrapper<EvelogTypeBypassed>;
+  EvelogTypeEther: ResolverTypeWrapper<EvelogTypeEther>;
+  EvelogTypeFlow: ResolverTypeWrapper<EvelogTypeFlow>;
+  EvelogTypeTcp: ResolverTypeWrapper<EvelogTypeTcp>;
   ExternalReference: ResolverTypeWrapper<ExternalReference>;
   ExternalReferenceAddInput: ExternalReferenceAddInput;
   ExternalReferenceConnection: ResolverTypeWrapper<ExternalReferenceConnection>;
@@ -16301,15 +16303,15 @@ export type ResolversParentTypes = {
   EmailMessageAddInput: EmailMessageAddInput;
   EmailMimePartType: EmailMimePartType;
   EmailMimePartTypeAddInput: EmailMimePartTypeAddInput;
-  Evelog: ResolversParentTypes['EvelogFlowOne'];
-  EvelogBypassed: EvelogBypassed;
-  EvelogEther: EvelogEther;
-  EvelogFlow: EvelogFlow;
+  EvelogFlow: ResolversParentTypes['EvelogFlowOne'];
   EvelogFlowConnection: EvelogFlowConnection;
   EvelogFlowEdge: EvelogFlowEdge;
   EvelogFlowOne: EvelogFlowOne;
   EvelogFlowsFiltering: EvelogFlowsFiltering;
-  EvelogTcp: EvelogTcp;
+  EvelogTypeBypassed: EvelogTypeBypassed;
+  EvelogTypeEther: EvelogTypeEther;
+  EvelogTypeFlow: EvelogTypeFlow;
+  EvelogTypeTcp: EvelogTypeTcp;
   ExternalReference: ExternalReference;
   ExternalReferenceAddInput: ExternalReferenceAddInput;
   ExternalReferenceConnection: ExternalReferenceConnection;
@@ -17565,7 +17567,7 @@ export type EmailMimePartTypeResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EvelogResolvers<ContextType = any, ParentType extends ResolversParentTypes['Evelog'] = ResolversParentTypes['Evelog']> = {
+export type EvelogFlowResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlow'] = ResolversParentTypes['EvelogFlow']> = {
   __resolveType: TypeResolveFn<'EvelogFlowOne', ParentType, ContextType>;
   app_proto?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   app_proto_expected?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -17575,8 +17577,9 @@ export type EvelogResolvers<ContextType = any, ParentType extends ResolversParen
   community_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   dest_ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   dest_port?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  ether?: Resolver<Maybe<ResolversTypes['EvelogEther']>, ParentType, ContextType>;
+  ether?: Resolver<Maybe<ResolversTypes['EvelogTypeEther']>, ParentType, ContextType>;
   event_type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  flow?: Resolver<Maybe<ResolversTypes['EvelogTypeFlow']>, ParentType, ContextType>;
   flow_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   icmp_code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   icmp_type?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -17586,12 +17589,53 @@ export type EvelogResolvers<ContextType = any, ParentType extends ResolversParen
   spi?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   src_ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   src_port?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  tcp?: Resolver<Maybe<ResolversTypes['EvelogTypeTcp']>, ParentType, ContextType>;
   tenant_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   timestamp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   vlan?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>;
 };
 
-export type EvelogBypassedResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogBypassed'] = ResolversParentTypes['EvelogBypassed']> = {
+export type EvelogFlowConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlowConnection'] = ResolversParentTypes['EvelogFlowConnection']> = {
+  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['EvelogFlowEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EvelogFlowEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlowEdge'] = ResolversParentTypes['EvelogFlowEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['EvelogFlow'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EvelogFlowOneResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlowOne'] = ResolversParentTypes['EvelogFlowOne']> = {
+  app_proto?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  app_proto_expected?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  app_proto_orig?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  app_proto_tc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  app_proto_ts?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  community_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dest_ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dest_port?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  ether?: Resolver<Maybe<ResolversTypes['EvelogTypeEther']>, ParentType, ContextType>;
+  event_type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  flow?: Resolver<Maybe<ResolversTypes['EvelogTypeFlow']>, ParentType, ContextType>;
+  flow_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  icmp_code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  icmp_type?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  in_iface?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  parent_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  proto?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  spi?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  src_ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  src_port?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  tcp?: Resolver<Maybe<ResolversTypes['EvelogTypeTcp']>, ParentType, ContextType>;
+  tenant_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  vlan?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EvelogTypeBypassedResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogTypeBypassed'] = ResolversParentTypes['EvelogTypeBypassed']> = {
   bytes_toclient?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bytes_toserver?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   pkts_toclient?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -17599,18 +17643,18 @@ export type EvelogBypassedResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EvelogEtherResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogEther'] = ResolversParentTypes['EvelogEther']> = {
+export type EvelogTypeEtherResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogTypeEther'] = ResolversParentTypes['EvelogTypeEther']> = {
   dest_macs?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   src_macs?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EvelogFlowResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlow'] = ResolversParentTypes['EvelogFlow']> = {
+export type EvelogTypeFlowResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogTypeFlow'] = ResolversParentTypes['EvelogTypeFlow']> = {
   action?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   age?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   alerted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   bypass?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  bypassed?: Resolver<Maybe<ResolversTypes['EvelogBypassed']>, ParentType, ContextType>;
+  bypassed?: Resolver<Maybe<ResolversTypes['EvelogTypeBypassed']>, ParentType, ContextType>;
   bytes_toclient?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   bytes_toserver?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   emergency?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -17624,47 +17668,7 @@ export type EvelogFlowResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type EvelogFlowConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlowConnection'] = ResolversParentTypes['EvelogFlowConnection']> = {
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['EvelogFlowEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type EvelogFlowEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlowEdge'] = ResolversParentTypes['EvelogFlowEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<ResolversTypes['Evelog'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type EvelogFlowOneResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogFlowOne'] = ResolversParentTypes['EvelogFlowOne']> = {
-  app_proto?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  app_proto_expected?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  app_proto_orig?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  app_proto_tc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  app_proto_ts?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  community_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dest_ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dest_port?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  ether?: Resolver<Maybe<ResolversTypes['EvelogEther']>, ParentType, ContextType>;
-  event_type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  flow?: Resolver<Maybe<ResolversTypes['EvelogFlow']>, ParentType, ContextType>;
-  flow_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  icmp_code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  icmp_type?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  in_iface?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  parent_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  proto?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  spi?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  src_ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  src_port?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  tcp?: Resolver<Maybe<ResolversTypes['EvelogTcp']>, ParentType, ContextType>;
-  tenant_id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  timestamp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  vlan?: Resolver<Maybe<Array<Maybe<ResolversTypes['Int']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type EvelogTcpResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogTcp'] = ResolversParentTypes['EvelogTcp']> = {
+export type EvelogTypeTcpResolvers<ContextType = any, ParentType extends ResolversParentTypes['EvelogTypeTcp'] = ResolversParentTypes['EvelogTypeTcp']> = {
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tcp_flags?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tcp_flags_tc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -19373,7 +19377,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   courseOfAction?: Resolver<Maybe<ResolversTypes['CourseOfAction']>, ParentType, ContextType, Partial<QueryCourseOfActionArgs>>;
   coursesOfAction?: Resolver<Maybe<ResolversTypes['CourseOfActionConnection']>, ParentType, ContextType, Partial<QueryCoursesOfActionArgs>>;
   elasticSearchMetrics?: Resolver<Maybe<ResolversTypes['ElasticSearchMetrics']>, ParentType, ContextType>;
-  evelogFlow?: Resolver<Maybe<ResolversTypes['EvelogFlowOne']>, ParentType, ContextType, RequireFields<QueryEvelogFlowArgs, 'id'>>;
+  evelogFlow?: Resolver<Maybe<ResolversTypes['EvelogFlow']>, ParentType, ContextType, RequireFields<QueryEvelogFlowArgs, 'id'>>;
   evelogFlows?: Resolver<Maybe<ResolversTypes['EvelogFlowConnection']>, ParentType, ContextType, Partial<QueryEvelogFlowsArgs>>;
   evelogFlowsDistribution?: Resolver<Maybe<Array<Maybe<ResolversTypes['Distribution']>>>, ParentType, ContextType, RequireFields<QueryEvelogFlowsDistributionArgs, 'field' | 'operation'>>;
   evelogFlowsNumber?: Resolver<Maybe<ResolversTypes['Number']>, ParentType, ContextType, Partial<QueryEvelogFlowsNumberArgs>>;
@@ -21685,14 +21689,14 @@ export type Resolvers<ContextType = any> = {
   EmailAddr?: EmailAddrResolvers<ContextType>;
   EmailMessage?: EmailMessageResolvers<ContextType>;
   EmailMimePartType?: EmailMimePartTypeResolvers<ContextType>;
-  Evelog?: EvelogResolvers<ContextType>;
-  EvelogBypassed?: EvelogBypassedResolvers<ContextType>;
-  EvelogEther?: EvelogEtherResolvers<ContextType>;
   EvelogFlow?: EvelogFlowResolvers<ContextType>;
   EvelogFlowConnection?: EvelogFlowConnectionResolvers<ContextType>;
   EvelogFlowEdge?: EvelogFlowEdgeResolvers<ContextType>;
   EvelogFlowOne?: EvelogFlowOneResolvers<ContextType>;
-  EvelogTcp?: EvelogTcpResolvers<ContextType>;
+  EvelogTypeBypassed?: EvelogTypeBypassedResolvers<ContextType>;
+  EvelogTypeEther?: EvelogTypeEtherResolvers<ContextType>;
+  EvelogTypeFlow?: EvelogTypeFlowResolvers<ContextType>;
+  EvelogTypeTcp?: EvelogTypeTcpResolvers<ContextType>;
   ExternalReference?: ExternalReferenceResolvers<ContextType>;
   ExternalReferenceConnection?: ExternalReferenceConnectionResolvers<ContextType>;
   ExternalReferenceEdge?: ExternalReferenceEdgeResolvers<ContextType>;
