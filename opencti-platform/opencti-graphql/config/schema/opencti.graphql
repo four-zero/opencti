@@ -8510,6 +8510,29 @@ input StixMetaRelationshipsAddInput {
 ### QUERIES
 
 type Query {
+  ###### EVELOG
+  ######## EVELOG FLOW
+  evelogFlow(id: String!): EvelogFlow @auth(for: [KNOWLEDGE])
+  evelogFlows(
+    first: Int
+    after: ID
+    types: [String]
+    orderBy: EvelogFlowsOrdering
+    orderMode: OrderingMode
+    filters: [EvelogFlowsFiltering]
+    filterMode: FilterMode
+    search: String
+    toStix: Boolean
+  ): EvelogFlowConnection @auth(for: [KNOWLEDGE])
+  evelogFlowsNumber(types: [String], authorId: String, endDate: DateTime): Number
+    @auth(for: [KNOWLEDGE, EXPLORE])
+  evelogFlowsDistribution(
+    objectId: String
+    field: String!
+    dateAttribute: String
+    operation: String!
+  ): [Distribution] @auth(for: [KNOWLEDGE, EXPLORE])
+
   ###### INTERNAL
 
   platform_theme: String
@@ -10279,27 +10302,27 @@ type EvelogFlowOne implements EvelogFlow {
   tcp: EvelogTypeTcp
 }
 
-extend type Query {
-  ###### EVELOG
-  ######## EVELOG FLOW
-  evelogFlow(id: String!): EvelogFlow @auth(for: [KNOWLEDGE])
-  evelogFlows(
-    first: Int
-    after: ID
-    types: [String]
-    orderBy: EvelogFlowsOrdering
-    orderMode: OrderingMode
-    filters: [EvelogFlowsFiltering]
-    filterMode: FilterMode
-    search: String
-    toStix: Boolean
-  ): EvelogFlowConnection @auth(for: [KNOWLEDGE])
-  evelogFlowsNumber(types: [String], authorId: String, endDate: DateTime): Number
-    @auth(for: [KNOWLEDGE, EXPLORE])
-  evelogFlowsDistribution(
-    objectId: String
-    field: String!
-    dateAttribute: String
-    operation: String!
-  ): [Distribution] @auth(for: [KNOWLEDGE, EXPLORE])
-}
+#extend type Query {
+#  ###### EVELOG
+#  ######## EVELOG FLOW
+#  evelogFlow(id: String!): EvelogFlow @auth(for: [KNOWLEDGE])
+#  evelogFlows(
+#    first: Int
+#    after: ID
+#    types: [String]
+#    orderBy: EvelogFlowsOrdering
+#    orderMode: OrderingMode
+#    filters: [EvelogFlowsFiltering]
+#    filterMode: FilterMode
+#    search: String
+#    toStix: Boolean
+#  ): EvelogFlowConnection @auth(for: [KNOWLEDGE])
+#  evelogFlowsNumber(types: [String], authorId: String, endDate: DateTime): Number
+#    @auth(for: [KNOWLEDGE, EXPLORE])
+#  evelogFlowsDistribution(
+#    objectId: String
+#    field: String!
+#    dateAttribute: String
+#    operation: String!
+#  ): [Distribution] @auth(for: [KNOWLEDGE, EXPLORE])
+#}
