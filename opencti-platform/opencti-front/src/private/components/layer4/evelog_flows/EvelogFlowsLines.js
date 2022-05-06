@@ -82,7 +82,6 @@ export const evelogFlowsLinesSubTypesQuery = graphql`
     subTypes(type: $type) {
       edges {
         node {
-          id
           label
         }
       }
@@ -131,7 +130,6 @@ export const evelogFlowsLinesSearchQuery = graphql`
       edges {
         node {
           timestamp
-          event_type
         }
       }
     }
@@ -152,7 +150,7 @@ export default createPaginationContainer(
           type: "EvelogFlowsOrdering"
           defaultValue: timestamp
         }
-        orderMode: { type: "OrderingMode", defaultValue: asc }
+        orderMode: { type: "OrderingMode", defaultValue: desc }
         filters: { type: "[EvelogFlowsFiltering]" }
       ) {
         evelogFlows(
@@ -167,13 +165,11 @@ export default createPaginationContainer(
           edges {
             node {
               timestamp
-              in_iface
-              event_type
-              dest_ip
-              dest_port
+              proto
               src_ip
               src_port
-              proto
+              dest_ip
+              dest_port
               ...EvelogFlowLine_node
             }
           }

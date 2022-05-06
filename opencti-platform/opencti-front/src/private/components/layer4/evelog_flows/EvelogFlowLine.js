@@ -95,15 +95,9 @@ class EvelogFlowLineComponent extends Component {
               </div>
               <div
                 className={classes.bodyItem}
-                style={{ width: dataColumns.in_iface.width }}
+                style={{ width: dataColumns.proto.width }}
               >
-                {node.in_iface}
-              </div>
-              <div
-                className={classes.bodyItem}
-                style={{ width: dataColumns.event_type.width }}
-              >
-                {node.event_type}
+                {node.proto}
               </div>
               <div
                 className={classes.bodyItem}
@@ -116,6 +110,18 @@ class EvelogFlowLineComponent extends Component {
                 style={{ width: dataColumns.dest_port.width }}
               >
                 {node.dest_port}
+              </div>
+              <div
+                className={classes.bodyItem}
+                style={{ width: dataColumns.src_ip.width }}
+              >
+                {node.src_ip}
+              </div>
+              <div
+                className={classes.bodyItem}
+                style={{ width: dataColumns.src_port.width }}
+              >
+                {node.src_port}
               </div>
             </div>
           }
@@ -146,16 +152,11 @@ const EvelogFlowLineFragment = createFragmentContainer(
     node: graphql`
       fragment EvelogFlowLine_node on EvelogFlow {
         timestamp
-        in_iface
-        event_type
-        dest_ip
-        dest_port
+        proto
         src_ip
         src_port
-        proto
-        flow {
-          age
-        }
+        dest_ip
+        dest_port
       }
     `,
   },
@@ -195,29 +196,40 @@ class EvelogFlowLineDummyComponent extends Component {
                 <Skeleton
                   animation="wave"
                   variant="rectangular"
-                  width="90%"
+                  width={100}
                   height="100%"
                 />
               </div>
               <div
                 className={classes.bodyItem}
-                style={{ width: dataColumns.in_iface.width }}
+                style={{ width: dataColumns.proto.width }}
               >
                 <Skeleton
                   animation="wave"
                   variant="rectangular"
-                  width="90%"
+                  width={100}
                   height="100%"
                 />
               </div>
               <div
                 className={classes.bodyItem}
-                style={{ width: dataColumns.event_type.width }}
+                style={{ width: dataColumns.src_ip.width }}
               >
                 <Skeleton
                   animation="wave"
                   variant="rectangular"
-                  width="90%"
+                  width={100}
+                  height="100%"
+                />
+              </div>
+              <div
+                className={classes.bodyItem}
+                style={{ width: dataColumns.src_port.width }}
+              >
+                <Skeleton
+                  animation="wave"
+                  variant="rectangular"
+                  width={100}
                   height="100%"
                 />
               </div>
@@ -228,7 +240,7 @@ class EvelogFlowLineDummyComponent extends Component {
                 <Skeleton
                   animation="wave"
                   variant="rectangular"
-                  width={140}
+                  width={100}
                   height="100%"
                 />
               </div>

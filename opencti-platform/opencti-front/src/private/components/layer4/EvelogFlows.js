@@ -42,7 +42,7 @@ class EvelogFlows extends Component {
       searchTerm: R.propOr('', 'searchTerm', params),
       view: R.propOr('lines', 'view', params),
       filters: R.propOr({}, 'filters', params),
-      observableTypes: R.propOr([], 'observableTypes', params),
+      eventTypes: R.propOr([], 'eventTypes', params),
       openExports: false,
       numberOfElements: { number: 0, symbol: '' },
       selectedElements: null,
@@ -72,26 +72,26 @@ class EvelogFlows extends Component {
   }
 
   handleToggle(type) {
-    if (this.state.observableTypes.includes(type)) {
+    if (this.state.eventTypes.includes(type)) {
       this.setState(
         {
-          observableTypes: R.filter(
+          eventTypes: R.filter(
             (t) => t !== type,
-            this.state.observableTypes,
+            this.state.eventTypes,
           ),
         },
         () => this.saveView(),
       );
     } else {
       this.setState(
-        { observableTypes: R.append(type, this.state.observableTypes) },
+        { eventTypes: R.append(type, this.state.eventTypes) },
         () => this.saveView(),
       );
     }
   }
 
   handleClear() {
-    this.setState({ observableTypes: [] }, () => this.saveView());
+    this.setState({ eventTypes: [] }, () => this.saveView());
   }
 
   handleToggleSelectEntity(entity, event) {
@@ -171,18 +171,23 @@ class EvelogFlows extends Component {
     return {
       timestamp: {
         label: 'Timestamp',
-        width: '15%',
+        width: '20%',
         isSortable: true,
       },
-      in_iface: {
-        label: 'Interface',
-        width: '15%',
-        isSortable: true,
-      },
-      event_type: {
-        label: 'Event Type',
-        width: '15%',
+      proto: {
+        label: 'Protocol',
+        width: '10%',
         isSortable: isRuntimeSort,
+      },
+      src_ip: {
+        label: 'Src IP',
+        width: '20%',
+        isSortable: true,
+      },
+      src_port: {
+        label: 'Src Port',
+        width: '15%',
+        isSortable: true,
       },
       dest_ip: {
         label: 'Dest IP',
@@ -191,7 +196,7 @@ class EvelogFlows extends Component {
       },
       dest_port: {
         label: 'Dest Port',
-        width: '18%',
+        width: '15%',
         isSortable: true,
       },
     };
@@ -207,7 +212,7 @@ class EvelogFlows extends Component {
       numberOfElements,
       selectedElements,
       selectAll,
-      observableTypes,
+      eventTypes,
     } = this.state;
     let numberOfSelectedElements = Object.keys(selectedElements || {}).length;
     if (selectAll) {
@@ -215,10 +220,10 @@ class EvelogFlows extends Component {
     }
     let finalFilters = filters;
     finalFilters = R.assoc(
-      'entity_type',
-      observableTypes.length > 0
-        ? R.map((n) => ({ id: n, value: n }), observableTypes)
-        : [{ id: 'Stix-Cyber-Observable', value: 'Stix-Cyber-Observable' }],
+      'event_type',
+      eventTypes.length > 0
+        ? R.map((n) => ({ id: n, value: n }), eventTypes)
+        : [{ id: 'flow', value: 'flow' }],
       finalFilters,
     );
     console.log("debug layer4 EvelogFlows renderLines on:");
@@ -292,7 +297,7 @@ class EvelogFlows extends Component {
     const { classes } = this.props;
     const {
       view,
-      observableTypes,
+      eventTypes,
       sortBy,
       orderAsc,
       searchTerm,
@@ -301,20 +306,19 @@ class EvelogFlows extends Component {
     } = this.state;
     const finalFilters = convertFilters(filters);
     const paginationOptions = {
-      types: observableTypes.length > 0 ? observableTypes : "flow",
+      types: eventTypes.length > 0 ? eventTypes : "flow",
       search: searchTerm,
       filters: finalFilters,
       orderBy: sortBy,
       orderMode: orderAsc ? 'asc' : 'desc',
     };
-    console.log("debug layer4 EvelogFlows render on:");
     return (
       <div className={classes.container}>
         {view === 'lines' ? this.renderLines(paginationOptions) : ''}
         <Security needs={[KNOWLEDGE_KNUPDATE]}>
         </Security>
         <EvelogFlowsRightBar
-          types={observableTypes}
+          types={eventTypes}
           handleToggle={this.handleToggle.bind(this)}
           handleClear={this.handleClear.bind(this)}
           openExports={openExports}
