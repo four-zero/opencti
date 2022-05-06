@@ -301,7 +301,7 @@ class EvelogFlows extends Component {
     } = this.state;
     const finalFilters = convertFilters(filters);
     const paginationOptions = {
-      types: observableTypes.length > 0 ? observableTypes : null,
+      types: observableTypes.length > 0 ? observableTypes : "flow",
       search: searchTerm,
       filters: finalFilters,
       orderBy: sortBy,

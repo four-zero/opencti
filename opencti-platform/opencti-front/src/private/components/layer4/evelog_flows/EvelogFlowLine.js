@@ -58,6 +58,8 @@ class EvelogFlowLineComponent extends Component {
       selectedElements,
       selectAll,
     } = this.props;
+    console.log("debug node")
+    console.log(node)
     return (
       <ListItem
         classes={{ root: classes.item }}
@@ -89,7 +91,6 @@ class EvelogFlowLineComponent extends Component {
                 className={classes.bodyItem}
                 style={{ width: dataColumns.timestamp.width }}
               >
-                {t(`entity_${node.event_type}`)}
                 {nsdt(node.timestamp)}
               </div>
               <div
@@ -144,10 +145,16 @@ const EvelogFlowLineFragment = createFragmentContainer(
   {
     node: graphql`
       fragment EvelogFlowLine_node on EvelogFlow {
+        timestamp
+        in_iface
+        event_type
+        dest_ip
+        dest_port
+        src_ip
+        src_port
+        proto
         flow {
           age
-          start
-          end
         }
       }
     `,
@@ -162,8 +169,6 @@ export const EvelogFlowLine = compose(
 class EvelogFlowLineDummyComponent extends Component {
   render() {
     const { classes, dataColumns } = this.props;
-    console.log("debug FlowLine on:");
-    console.log(dataColumns);
     return (
       <ListItem classes={{ root: classes.item }} divider={true}>
         <ListItemIcon
