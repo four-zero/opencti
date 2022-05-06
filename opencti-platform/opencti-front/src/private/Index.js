@@ -8,6 +8,7 @@ import LeftBar from './components/nav/LeftBar';
 import Dashboard from './components/Dashboard';
 import Search from './components/Search';
 import RootImport from './components/import/Root';
+import RootLayer4 from './components/layer4/Root';
 import RootAnalysis from './components/analysis/Root';
 import RootEvents from './components/events/Root';
 import RootObservations from './components/observations/Root';
@@ -74,6 +75,7 @@ const Index = ({ me, location }) => {
             path="/dashboard/search/:keyword"
             render={(routeProps) => <Search {...routeProps} me={me} />}
           />
+          <Route path="/dashboard/layer4" component={RootLayer4} />
           <BoundaryRoute path="/dashboard/analysis" component={RootAnalysis} />
           <BoundaryRoute path="/dashboard/events" component={RootEvents} />
           <Route path="/dashboard/observations" component={RootObservations} />

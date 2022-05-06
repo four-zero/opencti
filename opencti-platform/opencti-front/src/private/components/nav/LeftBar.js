@@ -83,7 +83,7 @@ const styles = (theme) => ({
 });
 
 const LeftBar = ({ t, location, classes, theme }) => {
-  const [open, setOpen] = useState({ activities: true, knowledge: true });
+  const [open, setOpen] = useState({ activities: true, knowledge: true, originals: true });
   const toggle = (key) => setOpen(assoc(key, !open[key], open));
   const { me } = useContext(UserContext);
   let toData;
@@ -114,6 +114,41 @@ const LeftBar = ({ t, location, classes, theme }) => {
           />
         </MenuItem>
         <Security needs={[KNOWLEDGE]}>
+          <MenuItem
+            dense={true}
+            classes={{ root: classes.menuItem }}
+            onClick={() => toggle('originals')}
+          >
+            <ListItemIcon style={{ minWidth: 30 }}>
+              <Brain fontSize="small" color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              classes={{ primary: classes.menuItemText }}
+              primary={t('Originals')}
+            />
+            {open.originals ? <ExpandLess /> : <ExpandMore />}
+          </MenuItem>
+          <Collapse in={open.originals}>
+            <MenuList component="nav" disablePadding={true}>
+              <MenuItem
+                component={Link}
+                to="/dashboard/layer4"
+                selected={location.pathname.includes('/dashboard/layer4')}
+                dense={true}
+                classes={{ root: classes.menuItemNested }}
+              >
+                <ListItemIcon
+                  style={{ minWidth: 30, color: theme.palette.text.secondary }}
+                >
+                  <AssignmentOutlined fontSize="small" color="inherit" />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.menuItemNestedText }}
+                  primary={t('Layer4')}
+                />
+              </MenuItem>
+            </MenuList>
+          </Collapse>
           <MenuItem
             dense={true}
             classes={{ root: classes.menuItem }}
