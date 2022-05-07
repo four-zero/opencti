@@ -31,23 +31,31 @@ const styles = () => ({
 class EvelogFlows extends Component {
   constructor(props) {
     super(props);
+    console.log("debug history !!!!!!!!!!!!!!!!!!!!!!");
+    console.log(props.history);
+    console.log("debug location !!!!!!!!!!!!!!!!!!!!!!");
+    console.log(props.location);
     const params = buildViewParamsFromUrlAndStorage(
       props.history,
       props.location,
       'view-evelog_flows',
     );
+    console.log("debug params !!!!!!!!!!!!!!!!!!!!!!");
+    console.log(params);
     this.state = {
       sortBy: R.propOr('timestamp', 'sortBy', params),
       orderAsc: R.propOr(false, 'orderAsc', params),
       searchTerm: R.propOr('', 'searchTerm', params),
       view: R.propOr('lines', 'view', params),
       filters: R.propOr({}, 'filters', params),
-      eventTypes: R.propOr([], 'eventTypes', params),
+      protoTypes: R.propOr([], 'protoTypes', params),
       openExports: false,
       numberOfElements: { number: 0, symbol: '' },
       selectedElements: null,
       selectAll: false,
     };
+    console.log("debug EvelogFlows this.stat !!!!!!!!!!!!!!!!!!!!!!");
+    console.log(this.state);
   }
 
   saveView() {
@@ -72,26 +80,26 @@ class EvelogFlows extends Component {
   }
 
   handleToggle(type) {
-    if (this.state.eventTypes.includes(type)) {
+    if (this.state.protoTypes.includes(type)) {
       this.setState(
         {
-          eventTypes: R.filter(
+          protoTypes: R.filter(
             (t) => t !== type,
-            this.state.eventTypes,
+            this.state.protoTypes,
           ),
         },
         () => this.saveView(),
       );
     } else {
       this.setState(
-        { eventTypes: R.append(type, this.state.eventTypes) },
+        { protoTypes: R.append(type, this.state.protoTypes) },
         () => this.saveView(),
       );
     }
   }
 
   handleClear() {
-    this.setState({ eventTypes: [] }, () => this.saveView());
+    this.setState({ protoTypes: [] }, () => this.saveView());
   }
 
   handleToggleSelectEntity(entity, event) {
@@ -212,7 +220,7 @@ class EvelogFlows extends Component {
       numberOfElements,
       selectedElements,
       selectAll,
-      eventTypes,
+      protoTypes,
     } = this.state;
     let numberOfSelectedElements = Object.keys(selectedElements || {}).length;
     if (selectAll) {
@@ -220,10 +228,10 @@ class EvelogFlows extends Component {
     }
     let finalFilters = filters;
     finalFilters = R.assoc(
-      'event_type',
-      eventTypes.length > 0
-        ? R.map((n) => ({ id: n, value: n }), eventTypes)
-        : [{ id: 'flow', value: 'flow' }],
+      'proto',
+      protoTypes.length > 0
+        ? R.map((n) => ({ id: n, value: n }), protoTypes)
+        : [{ id: 'Evelog-Flow', value: 'Evelog-Flow' }],
       finalFilters,
     );
     console.log("debug layer4 EvelogFlows renderLines on:");
@@ -243,7 +251,7 @@ class EvelogFlows extends Component {
               openExports={openExports}
               handleToggleSelectAll={this.handleToggleSelectAll.bind(this)}
               selectAll={selectAll}
-              exportEntityType="Stix-Cyber-Observable"
+              exportEntityType="Evelog-Flow"
               exportContext={null}
               keyword={searchTerm}
               filters={filters}
@@ -297,7 +305,7 @@ class EvelogFlows extends Component {
     const { classes } = this.props;
     const {
       view,
-      eventTypes,
+      protoTypes,
       sortBy,
       orderAsc,
       searchTerm,
@@ -306,7 +314,7 @@ class EvelogFlows extends Component {
     } = this.state;
     const finalFilters = convertFilters(filters);
     const paginationOptions = {
-      types: eventTypes.length > 0 ? eventTypes : "flow",
+      protoTypes: protoTypes.length > 0 ? protoTypes : null,
       search: searchTerm,
       filters: finalFilters,
       orderBy: sortBy,
@@ -318,7 +326,7 @@ class EvelogFlows extends Component {
         <Security needs={[KNOWLEDGE_KNUPDATE]}>
         </Security>
         <EvelogFlowsRightBar
-          types={eventTypes}
+          types={protoTypes}
           handleToggle={this.handleToggle.bind(this)}
           handleClear={this.handleClear.bind(this)}
           openExports={openExports}

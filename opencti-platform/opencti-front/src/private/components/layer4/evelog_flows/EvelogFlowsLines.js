@@ -32,7 +32,6 @@ class EvelogFlowsLines extends Component {
       selectAll,
     } = this.props;
     console.log("debug EvelogFlowsLines on:");
-    console.log(dataColumns);
     return (
       <ListLinesContent
         initialLoading={initialLoading}
@@ -103,7 +102,9 @@ export const evelogFlowsLinesAttributesQuery = graphql`
 
 export const evelogFlowsLinesQuery = graphql`
   query EvelogFlowsLinesPaginationQuery(
-    $types: [String]
+    $eventTypes: [String]
+    $protoTypes: [String]
+    $appProtoTypes: [String]
     $search: String
     $count: Int!
     $cursor: ID
@@ -113,7 +114,9 @@ export const evelogFlowsLinesQuery = graphql`
   ) {
     ...EvelogFlowsLines_data
       @arguments(
-        types: $types
+        eventTypes: $eventTypes
+        protoTypes: $protoTypes
+        appProtoTypes: $appProtoTypes
         search: $search
         count: $count
         cursor: $cursor
@@ -129,7 +132,7 @@ export const evelogFlowsLinesSearchQuery = graphql`
     evelogFlows(search: $search) {
       edges {
         node {
-          timestamp
+          proto
         }
       }
     }
@@ -142,7 +145,9 @@ export default createPaginationContainer(
     data: graphql`
       fragment EvelogFlowsLines_data on Query
       @argumentDefinitions(
-        types: { type: "[String]" }
+        eventTypes: { type: "[String]" }
+        protoTypes: { type: "[String]" }
+        appProtoTypes: { type: "[String]" }
         search: { type: "String" }
         count: { type: "Int", defaultValue: 25 }
         cursor: { type: "ID" }
@@ -154,7 +159,9 @@ export default createPaginationContainer(
         filters: { type: "[EvelogFlowsFiltering]" }
       ) {
         evelogFlows(
-          types: $types
+          eventTypes: $eventTypes
+          protoTypes: $protoTypes
+          appProtoTypes: $appProtoTypes
           search: $search
           first: $count
           after: $cursor
@@ -195,7 +202,9 @@ export default createPaginationContainer(
     },
     getVariables(props, { count, cursor }, fragmentVariables) {
       return {
-        types: fragmentVariables.types,
+        eventTypes: fragmentVariables.eventTypes,
+        protoTypes: fragmentVariables.protoTypes,
+        appProtoTypes: fragmentVariables.appProtoTypes,
         search: fragmentVariables.search,
         count,
         cursor,

@@ -104,6 +104,10 @@ export const buildViewParamsFromUrlAndStorage = (
   let finalParams = queryParams;
   if (localStorage.getItem(localStorageKey)) {
     const localParams = JSON.parse(localStorage.getItem(localStorageKey));
+    console.log("debug queryParams !!!!!!!!!!!!!");
+    console.log(queryParams);
+    console.log("debug localParams !!!!!!!!!!!!!");
+    console.log(localParams);
     finalParams = mergeLeft(queryParams, localParams);
   }
   if (finalParams.orderAsc) {
@@ -146,6 +150,8 @@ export const buildViewParamsFromUrlAndStorage = (
       ? split(',', finalParams.indicatorTypes)
       : [];
   }
+    console.log("typeof observableTypes");
+    console.log(typeof finalParams.observableTypes);
   if (typeof finalParams.observableTypes === 'string') {
     finalParams.observableTypes = finalParams.observableTypes
       ? split(',', finalParams.observableTypes)
@@ -177,6 +183,13 @@ export const buildViewParamsFromUrlAndStorage = (
   if (typeof finalParams.createdBy === 'string') {
     finalParams.createdBy = finalParams.createdBy
       ? split(',', finalParams.createdBy)
+      : '';
+  }
+    console.log("typeof protoTypes");
+    console.log(typeof finalParams.protoTypes);
+  if (typeof finalParams.protoTypes === 'string') {
+    finalParams.protoTypes = finalParams.protoTypes
+      ? split(',', finalParams.protoTypes)
       : '';
   }
   saveViewParameters(history, location, localStorageKey, finalParams);

@@ -67,21 +67,21 @@ class EvelogFlowsRightBar extends Component {
         <div className={classes.toolbar} />
         <QueryRenderer
           query={evelogFlowsLinesSubTypesQuery}
-          variables={{ type: 'Stix-Cyber-Observable' }}
+          variables={{ type: 'Evelog-Flow' }}
           render={({ props }) => {
             if (props && props.subTypes) {
               const subTypesEdges = props.subTypes.edges;
               const sortByLabel = sortBy(compose(toLower, prop('tlabel')));
               const translatedOrderedList = pipe(
                 map((n) => n.node),
-                map((n) => assoc('tlabel', t(`entity_${n.label}`), n)),
+                map((n) => assoc('tlabel', t(`${n.label}`), n)),
                 sortByLabel,
               )(subTypesEdges);
               return (
                 <List
                   subheader={
                     <ListSubheader component="div">
-                      {t('Observable types')}
+                      {t('Flow types')}
                       <Tooltip title={t('Clear filters')}>
                         <IconButton
                           onClick={handleClear.bind(this)}
