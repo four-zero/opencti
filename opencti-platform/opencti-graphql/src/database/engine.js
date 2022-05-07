@@ -1443,7 +1443,7 @@ export const elGenerateFullTextSearchShould = (search) => {
 export const elPaginate = async (user, indexName, options = {}) => {
   // eslint-disable-next-line no-use-before-define
   const { ids = [], first = 200, after, orderBy = null, orderMode = 'asc' } = options;
-  const { types = null, filters = [], filterMode = 'and', search = null, connectionFormat = true } = options;
+  const { types = null, eventTypes = null, filters = [], filterMode = 'and', search = null, connectionFormat = true } = options;
   const searchAfter = after ? cursorToOffset(after) : undefined;
   let must = [];
   let mustnot = [];
@@ -1470,6 +1470,15 @@ export const elPaginate = async (user, indexName, options = {}) => {
         return [
           { match_phrase: { 'entity_type.keyword': typeValue } },
           { match_phrase: { 'parent_types.keyword': typeValue } },
+        ];
+      })
+    );
+    must = R.append({ bool: { should, minimum_should_match: 1 } }, must);
+  }
+  if (eventTypes !== null && eventTypes.length > 0) {
+    const should = R.flatten(
+      eventTypes.map((typeValue) => {
+        return [
           { match_phrase: { 'event_type.keyword': typeValue } },
         ];
       })

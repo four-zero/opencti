@@ -23,10 +23,7 @@ const evelogFlowResolvers = {
   EvelogFlow: {
     __resolveType(obj) {
       console.log("graphql EvelogFlow", obj);
-      if (obj.event_type === 'flow') {
-        return 'EvelogFlowOne';
-      }
-      return 'Unknown';
+      return 'EvelogFlowOne';
       //if (obj.entity_type) {
       //  return obj.entity_type.replace(/(?:^|-)(\w)/g, (matches, letter) => letter.toUpperCase());
       //}

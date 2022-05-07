@@ -8,26 +8,28 @@ import { listEvelogs } from '../database/repository';
 import { elCount } from '../database/engine';
 import { READ_INDEX_EVELOGS } from '../database/utils';
 import { isEvelogFlow } from '../schema/evelogFlow';
-import { ABSTRACT_EVELOG } from '../schema/general';
+import { ABSTRACT_EVELOG_FLOW } from '../schema/general';
+import { EVELOG_EVENT_TYPE_FLOW } from '../schema/evelogFlow';
 
 export const findById = (user, evelogFlowId) => {
   //console.log("user:");
-  return loadById(user, evelogFlowId, ABSTRACT_EVELOG);
+  return loadById(user, evelogFlowId, ABSTRACT_EVELOG_FLOW);
 };
 
 export const findAll = async (user, args) => {
-  let types = [];
-  if (args.types && args.types.length > 0) {
-    types = filter((type) => isEvelogFlow(type), args.types);
+  let eventTypes = [];
+  if (args.eventTypes && args.eventTypes.length > 0) {
+    eventTypes = filter((type) => isEvelogFlow(type), args.eventTypes);
   }
-  if (types.length === 0) {
-    types.push(ABSTRACT_EVELOG);
+  if (eventTypes.length === 0) {
+    eventTypes.push(EVELOG_EVENT_TYPE_FLOW);
   }
   console.log("findall args:\n");
   console.log(args);
-  console.log("findall types:\n");
-  console.log(types);
-  return listEvelogs(user, types, args);
+  console.log("findall eventTypes:\n");
+  console.log(eventTypes);
+  console.log("findall eventTypes end\n");
+  return listEvelogs(user, eventTypes, args);
 };
 
 // region by elastic
@@ -43,5 +45,5 @@ export const evelogFlowDistribution = async (user, args) => distributionEntities
 export const evelogFlowDistributionByEntity = async (user, args) => {
   const { objectId } = args;
   const filters = [{ isRelation: true, type: args.relationship_type, value: objectId }];
-  return distributionEntities(user, ABSTRACT_EVELOG, filters, args);
+  return distributionEntities(user, ABSTRACT_EVELOG_FLOW, filters, args);
 };

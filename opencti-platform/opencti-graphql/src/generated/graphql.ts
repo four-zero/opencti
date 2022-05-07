@@ -2571,19 +2571,16 @@ export type EvelogFlowOne = EvelogFlow & {
 };
 
 export enum EvelogFlowsFilter {
+  AppProto = 'app_proto',
   DestIp = 'dest_ip',
   DestPort = 'dest_port',
   EventType = 'event_type',
   FlowId = 'flow_id',
-  IcmpType = 'icmp_type',
   InIface = 'in_iface',
-  ParentId = 'parent_id',
   Proto = 'proto',
-  Spi = 'spi',
   SrcIp = 'src_ip',
   SrcPort = 'src_port',
-  Timestamp = 'timestamp',
-  Vlan = 'vlan'
+  Timestamp = 'timestamp'
 }
 
 export type EvelogFlowsFiltering = {
@@ -2594,8 +2591,14 @@ export type EvelogFlowsFiltering = {
 };
 
 export enum EvelogFlowsOrdering {
+  AppProto = 'app_proto',
+  DestIp = 'dest_ip',
   DestPort = 'dest_port',
+  EventType = 'event_type',
+  FlowId = 'flow_id',
+  InIface = 'in_iface',
   Proto = 'proto',
+  SrcIp = 'src_ip',
   SrcPort = 'src_port',
   Timestamp = 'timestamp'
 }
@@ -8395,14 +8398,16 @@ export type QueryEvelogFlowArgs = {
 
 export type QueryEvelogFlowsArgs = {
   after?: InputMaybe<Scalars['ID']>;
+  appProtoTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  eventTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   filterMode?: InputMaybe<FilterMode>;
   filters?: InputMaybe<Array<InputMaybe<EvelogFlowsFiltering>>>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<EvelogFlowsOrdering>;
   orderMode?: InputMaybe<OrderingMode>;
+  protoTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   search?: InputMaybe<Scalars['String']>;
   toStix?: InputMaybe<Scalars['Boolean']>;
-  types?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 

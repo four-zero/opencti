@@ -63,7 +63,9 @@ export const ABSTRACT_STIX_CYBER_OBSERVABLE_HASHED_OBSERVABLE = 'Hashed-Observab
 export const ABSTRACT_INTERNAL_OBJECT = 'Internal-Object';
 
 // Evelog
-export const ABSTRACT_EVELOG = 'Evelog';
+export const ABSTRACT_EVELOG_FLOW = 'Evelog-Flow';
+export const ABSTRACT_EVELOG_APPLAYER = 'Evelog-Applayer';
+export const ABSTRACT_EVELOG_ALERT = 'Evelog-Alert';
 
 // Internal
 export const ENTITY_TYPE_CONTAINER = 'Container';
@@ -89,7 +91,9 @@ export const ABSTRACT_TYPES = [
   ABSTRACT_STIX_CORE_RELATIONSHIP,
   ABSTRACT_STIX_META_RELATIONSHIP,
   ABSTRACT_STIX_CYBER_OBSERVABLE_RELATIONSHIP,
-  ABSTRACT_EVELOG,
+  ABSTRACT_EVELOG_FLOW,
+  ABSTRACT_EVELOG_APPLAYER,
+  ABSTRACT_EVELOG_ALERT,
 ];
 export const isAbstract = (type) => R.includes(type, ABSTRACT_TYPES);
 export const schemaTypes = {

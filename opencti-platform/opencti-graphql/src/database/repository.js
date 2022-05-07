@@ -9,7 +9,7 @@ import { logApp } from '../config/conf';
 // region global queries
 export const buildFilters = (args = {}) => {
   const builtFilters = { ...args };
-  const { types = [], entityTypes = [], relationshipTypes = [], eventTypes = [] } = args;
+  const { types = [], entityTypes = [], relationshipTypes = [] } = args;
   const { elementId, elementWithTargetTypes = [] } = args;
   const { fromId, fromRole, fromTypes = [] } = args;
   const { toId, toRole, toTypes = [] } = args;
@@ -65,15 +65,8 @@ export const buildFilters = (args = {}) => {
   if (nestedTo.length > 0) {
     customFilters.push({ key: 'connections', nested: nestedTo });
   }
-  // endregion
-  // evelog proto
-  //const nestedEvelogProto = [];
-  //if (proto) {
-    //customFilters.push({ key: 'proto', nested: nestedEvelogProto })
-  //}
-  // end evelog proto
   // Override some special filters
-  builtFilters.types = [...(types ?? []), ...entityTypes, ...relationshipTypes, ...eventTypes];
+  builtFilters.types = [...(types ?? []), ...entityTypes, ...relationshipTypes];
   builtFilters.filters = customFilters;
   return builtFilters;
 };
@@ -85,9 +78,28 @@ export const listEntities = async (user, entityTypes, args = {}) => {
 };
 // endregion
 
+export const buildEvelogFilters = (args = {}) => {
+  const builtFilters = { ...args };
+  const { eventTypes = [], protoTypes = [] } = args;
+  const { filters = [] } = args;
+
+  const customFilters = [...(filters ?? [])];
+
+  if (protoTypes && protoTypes.length > 0) {
+    customFilters.push({ key: 'proto', values: protoTypes });
+  }
+
+  // Override some special filters
+  console.log("debug eventTypes")
+  console.log(eventTypes)
+  builtFilters.eventTypes = [...(eventTypes ?? [])];
+  builtFilters.filters = customFilters;
+  return builtFilters;
+}
+
 export const listEvelogs = async (user, eventTypes, args = {}) => {
   const { indices = READ_INDEX_EVELOGS } = args;
-  const paginateArgs = buildFilters({ eventTypes, ...args });
+  const paginateArgs = buildEvelogFilters({ eventTypes, ...args });
   logApp.debug('[EVELOG] paginate evelogs', { indices });
   return elPaginate(user, indices, paginateArgs);
 }

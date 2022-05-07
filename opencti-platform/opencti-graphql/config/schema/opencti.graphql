@@ -8516,7 +8516,9 @@ type Query {
   evelogFlows(
     first: Int
     after: ID
-    types: [String]
+    eventTypes: [String]
+    protoTypes: [String]
+    appProtoTypes: [String]
     orderBy: EvelogFlowsOrdering
     orderMode: OrderingMode
     filters: [EvelogFlowsFiltering]
@@ -10205,24 +10207,27 @@ type EvelogTypeTcp {
 ####### EVELOG FLOW
 enum EvelogFlowsOrdering {
   timestamp
-  src_port
-  dest_port
-  proto
-}
-enum EvelogFlowsFilter {
-  timestamp
   flow_id
-  parent_id
   in_iface
   event_type
-  vlan
+  proto
+  app_proto
   src_ip
   src_port
   dest_ip
   dest_port
+}
+enum EvelogFlowsFilter {
+  timestamp
+  flow_id
+  in_iface
+  event_type
   proto
-  icmp_type
-  spi
+  app_proto
+  src_ip
+  src_port
+  dest_ip
+  dest_port
 }
 input EvelogFlowsFiltering {
   key: EvelogFlowsFilter!
@@ -10309,7 +10314,9 @@ type EvelogFlowOne implements EvelogFlow {
 #  evelogFlows(
 #    first: Int
 #    after: ID
-#    types: [String]
+#    eventTypes: [String]
+#    protoTypes: [String]
+#    appProtoTypes: [String]
 #    orderBy: EvelogFlowsOrdering
 #    orderMode: OrderingMode
 #    filters: [EvelogFlowsFiltering]
